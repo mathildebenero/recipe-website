@@ -1,31 +1,50 @@
 import React, { useState } from 'react';
 
 const AddRecipeForm = ({ onClose, onSubmit }) => {
-  const [category, setCategory] = useState('salty'); // default to 'salty'
+  const [category, setCategory] = useState('salty');
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [description, setDescription] = useState('');
-  const [steps, setSteps] = useState(['']); // Start with one empty step
+  const [steps, setSteps] = useState(['']);
 
-  const handleStepChange = (e, index) => { // handleStepChange: This function updates the step at a specific index when the user types in a step input field.
-    const newSteps = [...steps]; // Creates a copy of the steps array to avoid mutating the original array directly.
-    newSteps[index] = e.target.value; // Updates the value of the step at the given index with the user's input.
-    setSteps(newSteps); // Updates the steps state with the modified array
+  const handleStepChange = (e, index) => {
+    const newSteps = [...steps];
+    newSteps[index] = e.target.value;
+    setSteps(newSteps);
   };
 
-  const addStepField = () => { // Adds a new empty step to the steps array.
-    setSteps([...steps, '']); // Updates the state with the new array containing an additional step input field.
+  const addStepField = () => {
+    setSteps([...steps, '']);
   };
 
-  const handleSubmit = (e) => { // This function is called when the form is submitted.
-    e.preventDefault(); // Prevents the default form behavior, which would reload the page upon submission.
-    const newRecipe = { category, name, image, description, steps }; // creates a new recipe object
-    onSubmit(newRecipe); // Pass the new recipe back to the parent component (App.js)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newRecipe = { category, name, image, description, steps };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newRecipe),
+      });
+
+      if (response.ok) {
+        alert('Recipe added successfully!');
+        onClose();
+      } else {
+        alert('Failed to add recipe. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while adding the recipe.');
+    }
   };
 
   return (
     <div className="modal">
-      <div className="overlay" onClick={onClose}></div> {/* Click overlay to close */}
+      <div className="overlay" onClick={onClose}></div>
       <div className="form-content">
         <h2>Add New Recipe</h2>
         <form onSubmit={handleSubmit}>

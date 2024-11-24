@@ -2,13 +2,14 @@
 
 import React from 'react'; // imports React from the react library, which is necessary in any React component file to enable JSX (the HTML-like syntax)
 
-const Header = ({ onFilter }) => { // defines a functional component called Header, that receives as a prop the function named onFilter
+const Header = ({ onFilter , onAddRecipeClick}) => { // defines a functional component called Header, that receives as a prop the function named onFilter
     return (
         <nav>
             <button onClick={() => onFilter('all')}>All Recipes</button>
             <button onClick={() => onFilter('salty')}>Salty</button>
             <button onClick={() => onFilter('sweet')}>Sweet</button>
             <button onClick={() => onFilter('favorites')}>Favorites</button>
+            <button onClick={onAddRecipeClick}>Add Recipe</button> {/* New Add Recipe button */}
         </nav>
     );
 };
