@@ -3,6 +3,7 @@ import Header from './components/Header';
 import RecipeList from './components/RecipeList';
 import RecipeDetail from './components/RecipeDetail';
 import AddRecipeForm from './components/AddRecipeForm'; // Import AddRecipeForm
+import './App.css';
 
 
 const App = () => {

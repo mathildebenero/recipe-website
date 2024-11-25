@@ -4,7 +4,7 @@ import RecipeItem from './RecipeItem'; // a compomemt to display each recipe
 const RecipeList = ({ recipes, onRecipeClick }) => { // the functional component named RecipeList accepts 2 props:
     // recipes: an array of recipes objects, onRecipeClick: function to be triggered when user clicks on a recipe
     return (
-        <div>
+        <div className="recipe-grid">
             {recipes.map(recipe => ( // itirates over the recipes array with the .map() function, for each recipe in the array, a RecipeItem will be rendered
                 <RecipeItem key={recipe.id} recipe={recipe} onClick={() => onRecipeClick(recipe)} />
             ))}
