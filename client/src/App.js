@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from './components/Header';
 import RecipeList from './components/RecipeList';
 import RecipeDetail from './components/RecipeDetail';
@@ -12,6 +12,10 @@ const App = () => {
   const [selectedRecipe, setSelectedRecipe] = useState(null); // The currently selected recipe for details
   const [showDetail, setShowDetail] = useState(false); // Control visibility of recipe details
   const [showAddForm, setShowAddForm] = useState(false); // For add recipe form
+
+  // Create refs to track modal elements
+  const detailRef = useRef(null);
+  const addFormRef = useRef(null);
 
 
   // Fetch recipes from the server (replace with your actual fetch logic)
@@ -30,23 +34,56 @@ const App = () => {
   }, []);
 
   const handleFilter = (filter) => {
-    console.log(filter)
-    console.log(filter === 'all')
     if (filter === 'all') {
-      setFilteredRecipes(recipes); // Show all recipes
+        setFilteredRecipes(recipes);// Show all recipes
+    } else if (filter === 'favorites') {
+        setFilteredRecipes(recipes.filter((recipe) => recipe.favorite)); // show the favorites recipe
     } else {
-      setFilteredRecipes(recipes.filter(recipe => recipe.category === filter)); // Filter based on type
+        setFilteredRecipes(recipes.filter((recipe) => recipe.category === filter)); // Filter based on type
     }
-  };
+};
 
   const handleRecipeClick = (recipe) => {
     setSelectedRecipe(recipe); // Set the selected recipe
     setShowDetail(true); // Show the recipe details modal
   };
 
-  const handleAddToFavorites = (recipe) => {
-    console.log('Adding to favorites:', recipe);
-    // Add logic to save to favorites if needed
+  const handleAddToFavorites = async (recipe) => {
+    const newFavoriteStatus = !recipe.favorite; // Toggle the current favorite status
+    try {
+      const response = await fetch(`http://localhost:5000/api/recipes/${recipe._id}/favorite`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ favorite: newFavoriteStatus }),
+      });
+  
+      if (response.ok) {
+        const updatedRecipe = await response.json();
+  
+        // Update the recipes state
+        setRecipes((prevRecipes) =>
+          prevRecipes.map((r) => (r._id === updatedRecipe._id ? updatedRecipe : r))
+        );
+  
+        // Update filteredRecipes to reflect the change
+        setFilteredRecipes((prevFilteredRecipes) =>
+          prevFilteredRecipes.map((r) => (r._id === updatedRecipe._id ? updatedRecipe : r))
+        );
+  
+        // Update selectedRecipe if it matches the updated recipe
+        if (selectedRecipe && selectedRecipe._id === updatedRecipe._id) {
+          setSelectedRecipe(updatedRecipe);
+        }
+  
+        console.log(
+          `Recipe updated: ${updatedRecipe.favorite ? 'Added to favorites' : 'Removed from favorites'}`
+        );
+      } else {
+        console.error('Failed to update recipe favorite status');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const handleCloseDetail = () => {
@@ -83,6 +120,24 @@ const App = () => {
     }
   };
   
+  // Handle global clicks to close modals
+  useEffect(() => {
+    const handleGlobalClick = (e) => {
+      if (
+        (detailRef.current && !detailRef.current.contains(e.target)) &&
+        (addFormRef.current && !addFormRef.current.contains(e.target))
+      ) {
+        setShowDetail(false);
+        setShowAddForm(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleGlobalClick);
+    return () => {
+      document.removeEventListener('mousedown', handleGlobalClick);
+    };
+  }, []);
+
   
   return (
     <div>
@@ -100,8 +155,8 @@ const App = () => {
         </div>
       )}
 
-      {showAddForm && (
-        <AddRecipeForm onClose={handleCloseAddForm} onSubmit={handleAddRecipe} />
+{showAddForm && (
+        <AddRecipeForm ref={addFormRef} onClose={handleCloseAddForm} onSubmit={handleAddRecipe} />
       )}
     </div>
   );

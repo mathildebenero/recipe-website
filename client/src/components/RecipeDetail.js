@@ -21,8 +21,12 @@ const RecipeDetail = ({ recipe, onAddToFavorites }) => { // defines a component 
             index: The index of the current step in the array, used as a unique key for each <li>.
             The key is important for React's reconciliation process when rendering lists of elements. */}
       </ul>
-      <button onClick={() => onAddToFavorites(recipe)}>Add to Favorites</button>
-      {/* Creates a button: This <button> element allows users to add the recipe to their favorites.
+      <button onClick={() => onAddToFavorites(recipe)}>
+      {recipe.favorite ? '★ Remove from Favorites' : '☆ Add to Favorites'}
+    </button>
+
+
+      {/* Creates a button: This <button> element allows users to add the recipe to their favorites or remove it from favorites.
       The onClick event handler calls the onAddToFavorites function, passing the current recipe as an argument when the button is clicked. */}
     </div>
   );

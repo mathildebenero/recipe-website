@@ -18,3 +18,4 @@ const RecipeList = ({ recipes, onRecipeClick }) => { // the functional component
 // onClick={() => onRecipeClick(recipe)}: This defines the click behavior for each RecipeItem. When a recipe is clicked, the onRecipeClick function (passed as a prop) is invoked, and the specific recipe object is passed to that function. This is how the parent component knows which recipe was clicked.
 
 export default RecipeList;
+

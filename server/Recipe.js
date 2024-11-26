@@ -22,6 +22,10 @@ const recipeSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
+  favorite: { 
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Recipe = mongoose.model('Recipe', recipeSchema);

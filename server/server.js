@@ -47,6 +47,26 @@ app.get('/api/recipes', async (req, res) => {
   }
 });
 
+// Update a recipe's favorite status
+app.patch('/api/recipes/:id/favorite', async (req, res) => {
+  const { id } = req.params; // Recipe ID from the request URL
+  const { favorite } = req.body; // Favorite status (true/false) from the request body
+  try {
+    // Update the favorite field of the recipe
+    const updatedRecipe = await Recipe.findByIdAndUpdate(
+      id,
+      { favorite },
+      { new: true } // Return the updated recipe
+    );
+    if (!updatedRecipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+    res.status(200).json(updatedRecipe);
+  } catch (error) {
+    console.error('Error updating favorite status:', error);
+    res.status(500).json({ message: 'Failed to update favorite status' });
+  }
+});
 
 // Start the server
 app.listen(PORT, () => {

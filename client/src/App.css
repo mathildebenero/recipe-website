@@ -60,17 +60,46 @@ body {
     font-weight: bold;
 }
 
+
+/* Recipe Grid */
+/* .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusts for responsiveness */
+    /*gap: 20px;
+    margin-top: 80px; /* Ensures content doesn't overlap the navbar */
+    /*padding: 20px;
+    justify-content: center; /* Centers the grid content */
+/*} */
+
+/* Recipe Grid */
+/* .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Ensure exactly 4 columns */
+    /* gap: 20px; /* Space between items */
+    /* margin-top: 80px; /* Ensures content doesn't overlap the navbar */
+    /* padding: 0 20px; /* Adds padding to left and right for symmetry */
+    /* box-sizing: border-box; /* Includes padding in the grid's size */
+/* } */ 
+
+
+
+
+
 /* Recipe Grid */
 .recipe-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 80px; /* Ensures content doesn't overlap the navbar */
-    padding: 20px;
+    grid-template-columns: repeat(4, 1fr); /* 4 equally sized columns */
+    gap: 20px; /* Equal spacing between items */
+    margin-top: 80px; /* Offset for the navbar */
+    padding: 0; /* No padding on the grid itself */
+    justify-content: space-between; /* Ensures symmetry */
 }
+
 
 /* Recipe Item */
 .recipe-item {
+    width: 320px; /* Adjust width for larger items */
+    height: 320px; /* Equal to width for a square shape */
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -80,7 +109,6 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 10px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -90,25 +118,25 @@ body {
 }
 
 .recipe-item img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+    width: 100%; /* Matches the width of the item */
+    height: 70%; /* Occupies 70% of the square for a balanced look */
+    object-fit: cover; /* Ensures the image covers the given space without distortion */
     border-bottom: 1px solid #ddd;
-    margin-bottom: 10px;
 }
 
 .recipe-item h3 {
-    font-size: 20px;
+    font-size: 18px;
     color: #333;
-    margin-bottom: 8px;
+    margin: 8px 0;
 }
 
 .recipe-item p {
     font-size: 14px;
     color: #777;
-    margin-bottom: 12px;
+    text-overflow: ellipsis; /* Truncate text if too long */
+    overflow: hidden;
+    white-space: nowrap; /* Prevent line wrapping */
 }
-
 /* Button Styling (if applicable) */
 .button {
     display: inline-block;
