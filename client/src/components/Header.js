@@ -1,18 +1,13 @@
 // the navigation bar component
 
 import React from 'react'; // imports React from the react library, which is necessary in any React component file to enable JSX (the HTML-like syntax)
+// import { useNavigate } from 'react-router-dom';
 
-const Header = ({ onFilter , onAddRecipeClick}) => { // defines a functional component called Header, that receives as a prop the function named onFilter
+
+const Header = ({ onFilter , onAddRecipeClick }) => { // defines a functional component called Header, that receives as a prop the function named onFilter
+// const navigate = useNavigate(); // Initialize navigation function
+
     return (
-        // <nav className="navbar">
-        //         <div className="logo">Recipe Hub</div>
-        //     <button onClick={() => onFilter('all')}>All Recipes</button>
-        //     <button onClick={() => onFilter('salty')}>Salty</button>
-        //     <button onClick={() => onFilter('sweet')}>Sweet</button>
-        //     <button onClick={() => onFilter('favorites')}>Favorites</button>
-        //     <button onClick={onAddRecipeClick}>Add Recipe</button> {/* New Add Recipe button */}
-        // </nav>
-        
 <nav className="navbar">
             <div className="logo">Recipe Hub</div>
             <button className="nav-button" onClick={() => onFilter('all')} aria-label="View all recipes">
@@ -30,6 +25,9 @@ const Header = ({ onFilter , onAddRecipeClick}) => { // defines a functional com
             <button className="nav-button" onClick={onAddRecipeClick} aria-label="Add a new recipe">
                 Add Recipe
             </button>
+            {<button className="nav-button" aria-label="Get Recipe ideas">
+                Get Recipe Ideas
+            </button>}
         </nav>
     );
 };

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Header from './components/Header';
-import RecipeList from './components/RecipeList';
-import RecipeDetail from './components/RecipeDetail';
-import AddRecipeForm from './components/AddRecipeForm'; // Import AddRecipeForm
-import './App.css';
+import Header from '../components/Header';
+import RecipeList from '../components/RecipeList';
+import RecipeDetail from '../components/RecipeDetail';
+import AddRecipeForm from '../components/AddRecipeForm'; // Import AddRecipeForm
+import '../style/Home.css';
 
 
-const App = () => {
+const Home = () => {
   const [recipes, setRecipes] = useState([]); // This will hold the fetched recipes
   const [filteredRecipes, setFilteredRecipes] = useState([]); // This will hold the filtered recipes
   const [selectedRecipe, setSelectedRecipe] = useState(null); // The currently selected recipe for details
@@ -18,7 +18,7 @@ const App = () => {
   const addFormRef = useRef(null);
 
 
-  // Fetch recipes from the server (replace with your actual fetch logic)
+  // Fetch recipes from the server
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -124,8 +124,8 @@ const App = () => {
   useEffect(() => {
     const handleGlobalClick = (e) => {
       if (
-        (detailRef.current && !detailRef.current.contains(e.target)) &&
-        (addFormRef.current && !addFormRef.current.contains(e.target))
+        (detailRef?.current && !detailRef.current.contains(e.target)) &&
+        (addFormRef?.current && !addFormRef.current.contains(e.target))
       ) {
         setShowDetail(false);
         setShowAddForm(false);
@@ -139,11 +139,13 @@ const App = () => {
   }, []);
 
   
+    
   return (
     <div>
       <Header onFilter={handleFilter} onAddRecipeClick={handleAddRecipeClick}/>
+
       <RecipeList recipes={filteredRecipes} onRecipeClick={handleRecipeClick} />
-      
+     
       {/* Conditional rendering for the RecipeDetail modal */}
       {showDetail && (
         <div className="modal">
@@ -155,11 +157,13 @@ const App = () => {
         </div>
       )}
 
-{showAddForm && (
+        {showAddForm && (
         <AddRecipeForm ref={addFormRef} onClose={handleCloseAddForm} onSubmit={handleAddRecipe} />
       )}
     </div>
-  );
+    );
 };
 
-export default App;
+export default Home;
+
+
