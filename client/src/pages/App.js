@@ -6,14 +6,14 @@ import Home from './Home.js';
 const App = () => {
   
   return (
-     <Home/>
+    //  <Home/>
     // <ExistingIdeas />
-    // <Router>
-    //     <Routes>
-    //       <Route path="/" element={<Home/>}/>
-    //       <Route path="/ideas" element={<ExistingIdeas />}/>
-    //     </Routes>
-    // </Router>
+    <Router>
+        <Routes>
+          <Route path="/" element={<Home/>}/>
+          <Route path="/ideas" element={<ExistingIdeas />}/>
+        </Routes>
+    </Router>
   );
 };
 

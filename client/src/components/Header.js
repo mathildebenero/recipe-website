@@ -1,14 +1,11 @@
-// the navigation bar component
+import React from 'react';
+import { useNavigate } from 'react-router-dom'; // ✅ Import useNavigate
 
-import React from 'react'; // imports React from the react library, which is necessary in any React component file to enable JSX (the HTML-like syntax)
-// import { useNavigate } from 'react-router-dom';
-
-
-const Header = ({ onFilter , onAddRecipeClick }) => { // defines a functional component called Header, that receives as a prop the function named onFilter
-// const navigate = useNavigate(); // Initialize navigation function
+const Header = ({ onFilter, onAddRecipeClick }) => {
+    const navigate = useNavigate(); // ✅ Create a navigation function
 
     return (
-<nav className="navbar">
+        <nav className="navbar">
             <div className="logo">Recipe Hub</div>
             <button className="nav-button" onClick={() => onFilter('all')} aria-label="View all recipes">
                 All Recipes
@@ -25,19 +22,12 @@ const Header = ({ onFilter , onAddRecipeClick }) => { // defines a functional co
             <button className="nav-button" onClick={onAddRecipeClick} aria-label="Add a new recipe">
                 Add Recipe
             </button>
-            {<button className="nav-button" aria-label="Get Recipe ideas">
+            {/* ✅ Navigate to '/ideas' when button is clicked */}
+            <button className="nav-button" onClick={() => navigate('/ideas')} aria-label="Get Recipe ideas">
                 Get Recipe Ideas
-            </button>}
+            </button>
         </nav>
     );
 };
-// The onClick event handler is used to detect when a button is clicked.
-// When clicked, it triggers an anonymous arrow function that calls onFilter('all').
-// The onFilter function is passed as a prop from the parent component (App.js), and the string 'all' tells the function which filter to apply (in this case, displaying all recipes).
 
-export default Header; // exports the Header component so it can be imported and used in other files, such as in App.js.
-
-// The Header component is a stateless functional component that renders a navigation bar with buttons.
-// It accepts a prop called onFilter, which is a function for filtering recipes.
-// Each button triggers the onFilter function with a different argument ('all', 'salty', 'sweet', or 'favorites') to filter the list of recipes accordingly.
-
+export default Header;
