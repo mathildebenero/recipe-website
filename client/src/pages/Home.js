@@ -13,11 +13,6 @@ const Home = () => {
   const [showDetail, setShowDetail] = useState(false); // Control visibility of recipe details
   const [showAddForm, setShowAddForm] = useState(false); // For add recipe form
 
-  // Create refs to track modal elements
-  const detailRef = useRef(null);
-  const addFormRef = useRef(null);
-
-
   // Fetch recipes from the server
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -119,27 +114,28 @@ const Home = () => {
       console.error('Error:', error);
     }
   };
-  
-  // Handle global clicks to close modals
-  useEffect(() => {
-    const handleGlobalClick = (e) => {
-      if (
-        (detailRef?.current && !detailRef.current.contains(e.target)) &&
-        (addFormRef?.current && !addFormRef.current.contains(e.target))
-      ) {
-        setShowDetail(false);
-        setShowAddForm(false);
-      }
-    };
 
-    document.addEventListener('mousedown', handleGlobalClick);
-    return () => {
-      document.removeEventListener('mousedown', handleGlobalClick);
-    };
-  }, []);
+  // DELETE functionability
+  const handleDeleteRecipe = async (recipeId) => {
+    try {
+        const response = await fetch(`http://localhost:5000/api/recipes/${recipeId}`, {
+            method: 'DELETE',
+        });
 
-  
-    
+        if (response.ok) {
+            setRecipes(prevRecipes => prevRecipes.filter(recipe => recipe._id !== recipeId));
+            setFilteredRecipes(prevFilteredRecipes => prevFilteredRecipes.filter(recipe => recipe._id !== recipeId));
+            setShowDetail(false);
+            alert('Recipe deleted successfully!');
+        } else {
+            alert('Failed to delete recipe.');
+        }
+    } catch (error) {
+        console.error('Error deleting recipe:', error);
+    }
+};
+
+
   return (
     <div>
       <Header onFilter={handleFilter} onAddRecipeClick={handleAddRecipeClick}/>
@@ -151,14 +147,15 @@ const Home = () => {
         <div className="modal">
           <div className="overlay" onClick={handleCloseDetail}></div>
           <div className="detail-content">
-            <RecipeDetail recipe={selectedRecipe} onAddToFavorites={handleAddToFavorites}/>
+            <RecipeDetail recipe={selectedRecipe} onAddToFavorites={handleAddToFavorites} onDelete={handleDeleteRecipe} 
+            />
             <button onClick={handleCloseDetail}>Close</button>
           </div>
         </div>
       )}
 
         {showAddForm && (
-        <AddRecipeForm ref={addFormRef} onClose={handleCloseAddForm} onSubmit={handleAddRecipe} />
+        <AddRecipeForm onClose={handleCloseAddForm} onSubmit={handleAddRecipe} />
       )}
     </div>
     );

@@ -34,6 +34,30 @@ app.post('/api/recipes', async (req, res) => {
   }
 });
 
+// DELETE route to remove a recipe by ID
+app.delete('/api/recipes/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      
+      // Ensure the ID is valid before querying
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+          return res.status(400).json({ message: "Invalid Recipe ID" });
+      }
+
+      const deletedRecipe = await Recipe.findByIdAndDelete(id);
+      console.log('the recipe to delete', deletedRecipe.name);
+      if (!deletedRecipe) {
+          return res.status(404).json({ message: "Recipe not found" });
+      }
+
+      res.json({ message: "Recipe deleted successfully", deletedRecipe });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error deleting recipe", error: error.message });
+  }
+});
+
+
 // GET route to fetch all recipes
 app.get('/api/recipes', async (req, res) => {
   try {

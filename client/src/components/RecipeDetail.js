@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RecipeDetail = ({ recipe, onAddToFavorites }) => { // defines a component named RecipeDetail
+const RecipeDetail = ({ recipe, onAddToFavorites, onDelete }) => { // defines a component named RecipeDetail
     // it accepts 2 props: recipe, an object containing data about a specific recipe
     // onAddToFavorites: a function that will be called when the "add to favorites" button is clicked
   return (
@@ -24,6 +24,9 @@ const RecipeDetail = ({ recipe, onAddToFavorites }) => { // defines a component 
       <button onClick={() => onAddToFavorites(recipe)}>
       {recipe.favorite ? '★ Remove from Favorites' : '☆ Add to Favorites'}
     </button>
+    <button onClick={() => onDelete(recipe._id)} className="delete-button">
+                ❌ Delete Recipe
+            </button>
 
 
       {/* Creates a button: This <button> element allows users to add the recipe to their favorites or remove it from favorites.
