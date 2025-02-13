@@ -30,21 +30,21 @@ const Home = () => {
   }, []);
 
   // ✅ Move handleAddExistingRecipe OUTSIDE of useEffect
-  const handleAddExistingRecipe = async (recipe) => {
-    try {
-      const response = await fetch('http://localhost:5000/api/recipes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(recipe),
-      });
+  // const handleAddExistingRecipe = async (recipe) => {
+  //   try {
+  //     const response = await fetch('http://localhost:5000/api/recipes', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(recipe),
+  //     });
 
-      if (response.ok) {
-        fetchRecipes(); // ✅ Now fetchRecipes is accessible and will refresh recipes
-      }
-    } catch (error) {
-      console.error('Error adding recipe:', error);
-    }
-  };
+  //     if (response.ok) {
+  //       fetchRecipes(); // ✅ Now fetchRecipes is accessible and will refresh recipes
+  //     }
+  //   } catch (error) {
+  //     console.error('Error adding recipe:', error);
+  //   }
+  // };
 
   const handleFilter = (filter) => {
     if (filter === 'all') {
