@@ -2,27 +2,31 @@ import '../style/ExistingIdeas.css';
 import React, { useEffect, useState, useRef } from 'react';
 
 const ExistingIdeas = () => {
-  const [recipes, setRecipes] = useState([]); // Store all fetched recipes
-  const [loading, setLoading] = useState(false); // Show loading indicator
+  const [recipes, setRecipes] = useState(() => {
+    // ✅ Load saved recipes from localStorage on page load
+    const savedRecipes = localStorage.getItem('savedRecipes');
+    return savedRecipes ? JSON.parse(savedRecipes) : [];
+  });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
-  const [addedRecipes, setAddedRecipes] = useState(new Set()); // Track added recipes
-  const [page, setPage] = useState(1); // Track current "page" of recipes
+  const [addedRecipes, setAddedRecipes] = useState(new Set());
+  const [page, setPage] = useState(1);
 
-  const containerRef = useRef(null); // Reference to detect scrolling
+  const containerRef = useRef(null);
 
   // ✅ Function to fetch 10 recipes at a time
   const fetchRecipeIdeas = async () => {
-    if (loading) return; // Prevent multiple requests at the same time
+    if (loading) return;
 
     setLoading(true);
     try {
       let newRecipes = [];
-      for (let i = 0; i < 10; i++) { // Fetch 10 recipes
+      for (let i = 0; i < 10; i++) {
         const response = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
         if (!response.ok) throw new Error('Failed to fetch recipe ideas');
         const data = await response.json();
-        
+
         if (data.meals) {
           const transformedRecipes = data.meals.map(meal => ({
             category: meal.strCategory === 'Dessert' ? 'sweety' : 'salty',
@@ -35,8 +39,12 @@ const ExistingIdeas = () => {
           newRecipes = [...newRecipes, ...transformedRecipes];
         }
       }
-      setRecipes(prevRecipes => [...prevRecipes, ...newRecipes]); // Append new recipes
-      setPage(prevPage => prevPage + 1); // Increment page number
+      setRecipes(prevRecipes => {
+        const updatedRecipes = [...prevRecipes, ...newRecipes];
+        localStorage.setItem('savedRecipes', JSON.stringify(updatedRecipes)); // ✅ Save to localStorage
+        return updatedRecipes;
+      });
+      setPage(prevPage => prevPage + 1);
     } catch (err) {
       console.error('Error fetching ideas:', err);
       setError(err.message);
@@ -49,7 +57,7 @@ const ExistingIdeas = () => {
     const handleScroll = () => {
       if (containerRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-        if (scrollTop + clientHeight >= scrollHeight - 20) { // User reached bottom
+        if (scrollTop + clientHeight >= scrollHeight - 20) {
           fetchRecipeIdeas();
         }
       }
@@ -67,9 +75,9 @@ const ExistingIdeas = () => {
     };
   }, [recipes]);
 
-  // ✅ Load recipes on first visit but keep them if navigating back
+  // ✅ Load recipes on first visit but use stored recipes when navigating back
   useEffect(() => {
-    if (recipes.length === 0) { // Prevent reloading already loaded recipes
+    if (recipes.length === 0) {
       fetchRecipeIdeas();
     }
   }, []);
