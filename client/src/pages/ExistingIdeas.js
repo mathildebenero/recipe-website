@@ -6,6 +6,9 @@ const ExistingIdeas = () => {
   const [recipes, setRecipes] = useState([]); // State to hold the fetched recipe ideas
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
+  const [message, setMessage] = useState(null); // Show success/error messages
+  const [addedRecipes, setAddedRecipes] = useState(new Set()); // ✅ Track added recipes
+
 
   useEffect(() => {
     // Fetch pre-existing recipe ideas from an external API
@@ -38,6 +41,27 @@ const ExistingIdeas = () => {
     fetchRecipeIdeas();
   }, []);
 
+  const handleAddExistingRecipe = async (recipe) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/recipes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(recipe),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setMessage(`✅ ${recipe.name} added successfully!`);
+        setAddedRecipes((prevSet) => new Set(prevSet).add(recipe.name)); // ✅ Mark recipe as added
+      } else {
+        setMessage(`⚠️ ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Error adding recipe:', error);
+      setMessage('⚠️ Error adding recipe.');
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -50,6 +74,13 @@ const ExistingIdeas = () => {
             <img src={recipe.image} alt={recipe.name} />
             <h3>{recipe.name}</h3>
             <p>{recipe.description.split('. ')[0]}...</p> {/* Show the first sentence */}
+            <button
+              onClick={() => handleAddExistingRecipe(recipe)}
+              className="nav-button"
+              disabled={addedRecipes.has(recipe.name)} // ✅ Disable button if already added
+            >
+              {addedRecipes.has(recipe.name) ? '✔ Added' : 'Add to My Recipes'}
+            </button>
           </div>
         ))}
       </div>

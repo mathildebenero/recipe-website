@@ -24,8 +24,14 @@ mongoose.connect('mongodb://localhost:27017/recipeDB', {
 app.post('/api/recipes', async (req, res) => {
   try {
     const { category, name, image, description, steps } = req.body;
+    
+    // Check if the recipe already exists (by name and image to avoid duplicates)
+    const existingRecipe = await Recipe.findOne({ name, image });
+    
+    if (existingRecipe) {
+      return res.status(400).json({ message: 'Recipe already exists in your collection' });
+    }
     const newRecipe = new Recipe({ category, name, image, description, steps });
-
     await newRecipe.save();
     res.status(201).json({ message: 'Recipe added successfully!' });
   } catch (error) {
