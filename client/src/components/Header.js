@@ -6,26 +6,28 @@ const Header = ({ onFilter, onAddRecipeClick }) => {
 
     return (
         <nav className="navbar">
-            <div className="logo">Recipe Hub</div>
-            <button className="nav-button" onClick={() => onFilter('all')} aria-label="View all recipes">
-                All Recipes
-            </button>
-            <button className="nav-button" onClick={() => onFilter('salty')} aria-label="View salty recipes">
-                Salty
-            </button>
-            <button className="nav-button" onClick={() => onFilter('sweet')} aria-label="View sweet recipes">
-                Sweet
-            </button>
-            <button className="nav-button" onClick={() => onFilter('favorites')} aria-label="View favorite recipes">
-                Favorites
-            </button>
-            <button className="nav-button" onClick={onAddRecipeClick} aria-label="Add a new recipe">
-                Add Recipe
-            </button>
-            {/* ✅ Navigate to '/ideas' when button is clicked */}
-            <button className="nav-button" onClick={() => navigate('/ideas')} aria-label="Get Recipe ideas">
-                Get Recipe Ideas
-            </button>
+            <div className="logo">Track your Recipes!</div> {/* ✅ Bigger and Prominent */}
+
+            <div className="nav-buttons"> {/* ✅ Group buttons together */}
+                <button onClick={() => onFilter('all')} aria-label="View all recipes">
+                    All Recipes
+                </button>
+                <button onClick={() => onFilter('salty')} aria-label="View salty recipes">
+                    Salty
+                </button>
+                <button onClick={() => onFilter('sweet')} aria-label="View sweet recipes">
+                    Sweet
+                </button>
+                <button onClick={() => onFilter('favorites')} aria-label="View favorite recipes">
+                    Favorites
+                </button>
+                <button onClick={onAddRecipeClick} aria-label="Add a new recipe">
+                    Add Recipe
+                </button>
+                <button onClick={() => navigate('/ideas')} aria-label="Get Recipe ideas">
+                    Get Recipe Ideas
+                </button>
+            </div>
         </nav>
     );
 };

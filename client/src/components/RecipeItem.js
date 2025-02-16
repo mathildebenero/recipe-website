@@ -8,10 +8,14 @@ const RecipeItem = ({ recipe, onClick }) => { // defines a functional component 
     // The onClick={onClick} attribute adds an event listener to the div.
     // When the user clicks anywhere inside the div, it triggers the onClick function passed down from the parent component.
     // This function is responsible for handling the recipe click event (e.g., showing recipe details).
-    <div className="recipe-item" onClick={onClick}> 
-      <img src={recipe.image} alt={recipe.name} />
-      <h3>{recipe.name}</h3>
+    <div className="recipe-item" onClick={onClick}>
+      <div className="recipe-image">
+        <img src={recipe.image} alt={recipe.name} />
+        <div className="recipe-shadow"></div>
+        <div className="recipe-title">{recipe.name}</div>
+      </div>
     </div>
+
   );
 };
 
