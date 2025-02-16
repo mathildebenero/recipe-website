@@ -112,7 +112,7 @@ const ExistingIdeas = () => {
           <div key={index} className="recipe-item">
             <img src={recipe.image} alt={recipe.name} />
             <h3>{recipe.name}</h3>
-            <p>{recipe.description.split('. ')[0]}...</p>
+            {/* <p>{recipe.description.split('. ')[0]}...</p> */}
             <button
               onClick={() => handleAddExistingRecipe(recipe)}
               className="nav-button"

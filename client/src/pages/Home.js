@@ -163,6 +163,7 @@ const Home = () => {
               recipe={selectedRecipe}
               onAddToFavorites={handleAddToFavorites}
               onDelete={handleDeleteRecipe}
+              onClose={handleCloseAddForm}
             />
             <button onClick={handleCloseDetail}>Close</button>
           </div>

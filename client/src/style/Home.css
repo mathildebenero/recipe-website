@@ -152,3 +152,217 @@ body {
 .button:hover {
     background-color: #e64a19;
 }
+
+/* Add Recipe Form style*/
+
+/* AddRecipeForm.css */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+  }
+  
+  .form-content {
+    background: white;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    position: relative;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  label {
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    color: #555;
+  }
+  
+  input,
+  textarea,
+  select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  button[type="submit"] {
+    background: #28a745;
+    color: white;
+    font-weight: bold;
+  }
+  
+  button[type="submit"]:hover {
+    background: #218838;
+  }
+  
+  button[type="button"] {
+    background: #007bff;
+    color: white;
+  }
+  
+  button[type="button"]:hover {
+    background: #0056b3;
+  }
+  
+  .close-btn {
+    background: #dc3545;
+    color: white;
+    margin-top: 10px;
+  }
+  
+  .close-btn:hover {
+    background: #c82333;
+  }
+  
+  /* Modal Styling for Recipe Details */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+}
+
+.recipe-detail-modal {
+    background: white;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    position: relative;
+    text-align: center;
+}
+
+.recipe-detail-modal img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.recipe-detail-modal h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.recipe-detail-modal p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.recipe-detail-modal ul {
+    text-align: left;
+    padding: 0;
+    list-style-type: decimal;
+    margin-bottom: 15px;
+}
+
+.recipe-detail-modal ul li {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.recipe-detail-modal button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    margin: 5px;
+}
+
+.recipe-detail-modal button:first-of-type {
+    background: #ffcc00;
+    color: #333;
+}
+
+.recipe-detail-modal button:first-of-type:hover {
+    background: #e6b800;
+}
+
+.delete-button {
+    background: #dc3545;
+    color: white;
+}
+
+.delete-button:hover {
+    background: #c82333;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #555;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: black;
+}
