@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FaBars } from 'react-icons/fa'; // Import hamburger icon
 import Header from '../components/Header';
 import RecipeList from '../components/RecipeList';
 import RecipeDetail from '../components/RecipeDetail';
