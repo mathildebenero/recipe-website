@@ -7,10 +7,16 @@ const ExistingIdeas = () => {
     const savedRecipes = localStorage.getItem('savedRecipes');
     return savedRecipes ? JSON.parse(savedRecipes) : [];
   });
+
+  const [addedRecipes, setAddedRecipes] = useState(() => {
+    // ✅ Load added recipes from localStorage to persist button state
+    const savedAddedRecipes = localStorage.getItem('addedRecipes');
+    return savedAddedRecipes ? new Set(JSON.parse(savedAddedRecipes)) : new Set();
+  });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
-  const [addedRecipes, setAddedRecipes] = useState(new Set());
   const [page, setPage] = useState(1);
 
   const containerRef = useRef(null);
@@ -28,17 +34,27 @@ const ExistingIdeas = () => {
         const data = await response.json();
 
         if (data.meals) {
-          const transformedRecipes = data.meals.map(meal => ({
-            category: meal.strCategory === 'Dessert' ? 'sweety' : 'salty',
-            name: meal.strMeal,
-            image: meal.strMealThumb,
-            description: meal.strInstructions,
-            steps: meal.strInstructions ? meal.strInstructions.split('. ').filter(Boolean) : [],
-            favorite: false,
-          }));
+          const transformedRecipes = data.meals.map(meal => {
+            // ✅ Extract ingredients dynamically
+            const ingredients = Array.from({ length: 20 }, (_, i) => {
+              const ingredient = meal[`strIngredient${i + 1}`]?.trim();
+              const measure = meal[`strMeasure${i + 1}`]?.trim();
+              return ingredient && ingredient !== "" ? (measure ? `${measure} ${ingredient}` : ingredient) : null;
+            }).filter(Boolean);
+
+            return {
+              category: meal.strCategory === 'Dessert' ? 'sweety' : 'salty',
+              name: meal.strMeal,
+              image: meal.strMealThumb,
+              ingredients,
+              steps: meal.strInstructions ? meal.strInstructions.split('. ').filter(Boolean) : [],
+              favorite: false,
+            };
+          });
           newRecipes = [...newRecipes, ...transformedRecipes];
         }
       }
+
       setRecipes(prevRecipes => {
         const updatedRecipes = [...prevRecipes, ...newRecipes];
         localStorage.setItem('savedRecipes', JSON.stringify(updatedRecipes)); // ✅ Save to localStorage
@@ -93,7 +109,14 @@ const ExistingIdeas = () => {
       const data = await response.json();
       if (response.ok) {
         setMessage(`✅ ${recipe.name} added successfully!`);
-        setAddedRecipes((prevSet) => new Set(prevSet).add(recipe.name));
+
+        // ✅ Update the addedRecipes state
+        setAddedRecipes((prevSet) => {
+          const updatedSet = new Set(prevSet);
+          updatedSet.add(recipe.name);
+          localStorage.setItem('addedRecipes', JSON.stringify([...updatedSet])); // ✅ Save to localStorage
+          return updatedSet;
+        });
       } else {
         setMessage(`⚠️ ${data.message}`);
       }
@@ -112,7 +135,6 @@ const ExistingIdeas = () => {
           <div key={index} className="recipe-item">
             <img src={recipe.image} alt={recipe.name} />
             <h3>{recipe.name}</h3>
-            {/* <p>{recipe.description.split('. ')[0]}...</p> */}
             <button
               onClick={() => handleAddExistingRecipe(recipe)}
               className="nav-button"

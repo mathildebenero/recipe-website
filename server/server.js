@@ -23,22 +23,28 @@ mongoose.connect('mongodb://localhost:27017/recipeDB', {
 // POST route to add a new recipe
 app.post('/api/recipes', async (req, res) => {
   try {
-    const { category, name, image, description, steps } = req.body;
-    
-    // Check if the recipe already exists (by name and image to avoid duplicates)
+    const { category, name, image, ingredients, steps } = req.body;
+
+    console.log("🛠️ DEBUG: Received Recipe Data:");
+    console.log("✔️ Name:", name);
+    console.log("✔️ Ingredients:", ingredients);  // ✅ Print the ingredients list to verify
+
     const existingRecipe = await Recipe.findOne({ name, image });
-    
     if (existingRecipe) {
       return res.status(400).json({ message: 'Recipe already exists in your collection' });
     }
-    const newRecipe = new Recipe({ category, name, image, description, steps });
+
+    const newRecipe = new Recipe({ category, name, image, ingredients, steps });
     await newRecipe.save();
+    
+    console.log('🛠️ DEBUG: Recipe saved successfully:', newRecipe);
     res.status(201).json({ message: 'Recipe added successfully!' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Failed to add recipe' });
   }
 });
+
 
 // DELETE route to remove a recipe by ID
 app.delete('/api/recipes/:id', async (req, res) => {

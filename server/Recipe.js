@@ -1,4 +1,3 @@
-// models/Recipe.js
 const mongoose = require('mongoose');
 
 const recipeSchema = new mongoose.Schema({
@@ -14,8 +13,8 @@ const recipeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: {
-    type: String,
+  ingredients: {
+    type: [String],
     required: true,
   },
   steps: {

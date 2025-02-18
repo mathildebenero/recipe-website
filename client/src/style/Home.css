@@ -62,8 +62,6 @@ body {
     background-color: #FFDAB9; /* PeachPuff for active selection */
     font-weight: bold;
 }
-
-
 /* Import Comfortaa Font */
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
 
@@ -293,87 +291,103 @@ body {
     background: #c82333;
   }
   
-  /* Modal Styling for Recipe Details */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-}
-
+/* ✅ Modal Centering & Size */
 .recipe-detail-modal {
+    width: calc(4 * 300px + 3 * 20px); /* Matches the width of 4 recipe items */
+    max-width: 80vw; /* Prevents modal from being too wide */
     background: white;
-    padding: 2rem;
-    width: 90%;
-    max-width: 500px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     z-index: 1001;
     position: relative;
-    text-align: center;
+    max-height: 80vh;
+    overflow: hidden; /* Prevents background from scrolling */
+    display: flex;
+    flex-direction: column;
 }
 
-.recipe-detail-modal img {
+/* ✅ Split Left & Right */
+.modal-content {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    max-height: 70vh; /* Ensures modal doesn't overflow */
+    overflow: hidden;
+}
+
+/* ✅ Left Section: Image */
+.modal-left {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+/* ✅ Recipe Image */
+.recipe-detail-image {
     width: 100%;
-    max-height: 250px;
+    aspect-ratio: 1 / 1; /* ✅ Ensures it's always a square */
     object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 1rem;
 }
 
-.recipe-detail-modal h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 10px;
+/* ✅ Right Section: Title + Ingredients + Steps */
+.modal-right {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+    max-height: 100%;
+    padding-right: 20px;
 }
 
-.recipe-detail-modal p {
+/* ✅ Recipe Ingredients - Added margin to separate from title */
+.recipe-ingredients {
+    list-style-type: disc;
+    padding-left: 20px;
     font-size: 16px;
-    color: #555;
-    margin-bottom: 15px;
+    color: #666;
+    line-height: 1.5;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 15px; /* Space between ingredients and steps */
 }
 
-.recipe-detail-modal ul {
-    text-align: left;
-    padding: 0;
+/* ✅ Steps List - Ensures proper spacing */
+.recipe-steps {
     list-style-type: decimal;
-    margin-bottom: 15px;
+    padding-left: 20px;
+    max-height: 250px;
+    overflow-y: auto;
 }
 
-.recipe-detail-modal ul li {
-    font-size: 14px;
-    margin: 5px 0;
+
+/* ✅ Buttons */
+.modal-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
 }
 
-.recipe-detail-modal button {
+.modal-buttons button {
     padding: 10px;
     border: none;
     cursor: pointer;
     font-size: 1rem;
     border-radius: 5px;
     transition: all 0.3s ease-in-out;
-    margin: 5px;
 }
 
-.recipe-detail-modal button:first-of-type {
+.modal-buttons button:first-of-type {
     background: #ffcc00;
     color: #333;
 }
 
-.recipe-detail-modal button:first-of-type:hover {
+.modal-buttons button:first-of-type:hover {
     background: #e6b800;
 }
 
@@ -386,6 +400,24 @@ body {
     background: #c82333;
 }
 
+/* ✅ Scrollbar Customization */
+.modal-left::-webkit-scrollbar,
+.modal-right::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-left::-webkit-scrollbar-thumb,
+.modal-right::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 4px;
+}
+
+.modal-left::-webkit-scrollbar-track,
+.modal-right::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* ✅ Close Button */
 .close-btn {
     position: absolute;
     top: 10px;

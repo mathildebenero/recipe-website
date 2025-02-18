@@ -4,8 +4,18 @@ const AddRecipeForm = ({ onClose, onSubmit }) => {
   const [category, setCategory] = useState('salty');
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
-  const [description, setDescription] = useState('');
+  const [ingredients, setIngredients] = useState(['']); // ✅ New Field
   const [steps, setSteps] = useState(['']);
+
+  const handleIngredientChange = (e, index) => {
+    const newIngredients = [...ingredients];
+    newIngredients[index] = e.target.value;
+    setIngredients(newIngredients);
+  };
+
+  const addIngredientField = () => {
+    setIngredients([...ingredients, '']);
+  };
 
   const handleStepChange = (e, index) => {
     const newSteps = [...steps];
@@ -19,7 +29,7 @@ const AddRecipeForm = ({ onClose, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newRecipe = { category, name, image, description, steps };
+    const newRecipe = { category, name, image, ingredients, steps };
 
     try {
       const response = await fetch('http://localhost:5000/api/recipes', {
@@ -45,9 +55,9 @@ const AddRecipeForm = ({ onClose, onSubmit }) => {
   return (
     <div className="modal">
       <div className="overlay" onClick={onClose}></div>
-        <div className="form-content">
-          <h2>Add New Recipe</h2>
-          <form onSubmit={handleSubmit}>
+      <div className="form-content">
+        <h2>Add New Recipe</h2>
+        <form onSubmit={handleSubmit}>
           <label>
             Category:
             <select value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -64,8 +74,17 @@ const AddRecipeForm = ({ onClose, onSubmit }) => {
             <input type="text" value={image} onChange={(e) => setImage(e.target.value)} required />
           </label>
           <label>
-            Description:
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
+            Ingredients:
+            {ingredients.map((ingredient, index) => (
+              <input
+                key={index}
+                type="text"
+                value={ingredient}
+                onChange={(e) => handleIngredientChange(e, index)}
+                required
+              />
+            ))}
+            <button type="button" onClick={addIngredientField}>Add Ingredient</button>
           </label>
           <label>
             Steps:
@@ -80,12 +99,11 @@ const AddRecipeForm = ({ onClose, onSubmit }) => {
             ))}
             <button type="button" onClick={addStepField}>Add Step</button>
           </label>
-        <button type="submit">Add Recipe</button>
+          <button type="submit">Add Recipe</button>
         </form>
         <button onClick={onClose} className="close-btn">Close</button>
       </div>
     </div>
-
   );
 };
 
