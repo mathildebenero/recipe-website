@@ -12,6 +12,12 @@ const recipeSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true,
+    validate: {
+      validator: function(v) {
+        return /^https?:\/\//.test(v); // Ensures the image field is a URL
+      },
+      message: props => `${props.value} is not a valid URL!`
+    }
   },
   ingredients: {
     type: [String],

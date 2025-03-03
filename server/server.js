@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 
 const Recipe = require('./Recipe');
@@ -12,29 +15,40 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Set up multer-storage-cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'recipe_images', // Folder name in Cloudinary
+    allowed_formats: ['jpg', 'png'],
+  },
+});
+
+const upload = multer({ storage });
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('MongoDB connection error:', error));
 
 // POST route to add a new recipe
-app.post('/api/recipes', async (req, res) => {
+app.post('/api/recipes', upload.single('image'), async (req, res) => {
   try {
-    const { category, name, image, ingredients, steps } = req.body;
+    const { category, name, ingredients, steps, imageUrl } = req.body;
 
-    console.log("🛠️ DEBUG: Received Recipe Data:");
-    console.log("✔️ Name:", name);
-    console.log("✔️ Ingredients:", ingredients);  // ✅ Print the ingredients list to verify
-
-    // const existingRecipe = await Recipe.findOne({ name, image });
-    // if (existingRecipe) {
-    //   return res.status(400).json({ message: 'Recipe already exists in your collection' });
-    // }
+    // Use the uploaded image URL from Cloudinary or the provided external URL
+    const image = req.file ? req.file.path : imageUrl;
 
     const newRecipe = new Recipe({ category, name, image, ingredients, steps });
     await newRecipe.save();
     
-    console.log('🛠️ DEBUG: Recipe saved successfully:', newRecipe);
     res.status(201).json({ message: 'Recipe added successfully!' });
   } catch (error) {
     console.error(error);

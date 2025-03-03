@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const AddRecipeForm = ({ onClose, onSubmit }) => {
   const [category, setCategory] = useState('salty');
   const [name, setName] = useState('');
-  const [image, setImage] = useState('');
+  const [imageSource, setImageSource] = useState('url'); // 'url' or 'upload'
+  const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState(null);
   const [ingredients, setIngredients] = useState(['']); // ✅ New Field
   const [steps, setSteps] = useState(['']);
 
@@ -27,8 +30,37 @@ const AddRecipeForm = ({ onClose, onSubmit }) => {
     setSteps([...steps, '']);
   };
 
+  const handleImageUpload = async () => {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    formData.append('upload_preset', 'bcp0vesx'); // Replace with your unsigned upload preset
+    formData.append('cloud_name', 'dzfnow4os'); // Replace with your Cloudinary cloud name
+
+    try {
+      const response = await axios.post(
+        'https://api.cloudinary.com/v1_1/dzfnow4os/upload', // Replace with your Cloudinary URL
+        formData
+      );
+      return response.data.secure_url; // Cloudinary URL of the uploaded image
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw new Error('Image upload failed');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let image = imageUrl;
+
+    if (imageSource === 'upload' && imageFile) {
+      try {
+        image = await handleImageUpload();
+      } catch (error) {
+        alert('Failed to upload image. Please try again.');
+        return;
+      }
+    }
+
     const newRecipe = { category, name, image, ingredients, steps };
 
     try {
@@ -70,9 +102,33 @@ const AddRecipeForm = ({ onClose, onSubmit }) => {
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
           </label>
           <label>
-            Image URL:
-            <input type="text" value={image} onChange={(e) => setImage(e.target.value)} required />
+            Image Source:
+            <select value={imageSource} onChange={(e) => setImageSource(e.target.value)}>
+              <option value="url">External URL</option>
+              <option value="upload">Upload from Device</option>
+            </select>
           </label>
+          {imageSource === 'url' ? (
+            <label>
+              Image URL:
+              <input
+                type="text"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                required
+              />
+            </label>
+          ) : (
+            <label>
+              Upload Image:
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImageFile(e.target.files[0])}
+                required
+              />
+            </label>
+          )}
           <label>
             Ingredients:
             {ingredients.map((ingredient, index) => (
