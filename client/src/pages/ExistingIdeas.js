@@ -26,7 +26,7 @@ const ExistingIdeas = () => {
   useEffect(() => {
     const syncAddedRecipesWithDB = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/recipes');
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recipes`);
         if (!response.ok) {
           throw new Error('Failed to fetch user recipes from DB');
         }
@@ -142,7 +142,7 @@ const ExistingIdeas = () => {
   const handleAddExistingRecipe = async (recipe) => {
     console.log('Posting recipe:', recipe);
     try {
-      const response = await fetch('http://localhost:5000/api/recipes', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recipes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(recipe),

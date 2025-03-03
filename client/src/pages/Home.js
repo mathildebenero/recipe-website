@@ -15,7 +15,7 @@ const Home = () => {
   // ✅ Move fetchRecipes OUTSIDE of useEffect
   const fetchRecipes = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/recipes');
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recipes`);
       const data = await response.json();
       setRecipes(data);
       setFilteredRecipes(data);
@@ -48,7 +48,7 @@ const Home = () => {
   const handleAddToFavorites = async (recipe) => {
     const newFavoriteStatus = !recipe.favorite;
     try {
-      const response = await fetch(`http://localhost:5000/api/recipes/${recipe._id}/favorite`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recipes/${recipe._id}/favorite`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ favorite: newFavoriteStatus }),
@@ -94,7 +94,8 @@ const Home = () => {
 
   const handleAddRecipe = async (newRecipe) => {
     try {
-      const response = await fetch('http://localhost:5000/api/recipes', {
+
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recipes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newRecipe),
@@ -115,7 +116,7 @@ const Home = () => {
 
   const handleDeleteRecipe = async (recipeId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/recipes/${recipeId}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recipes/${recipeId}`, {
         method: 'DELETE',
       });
 
