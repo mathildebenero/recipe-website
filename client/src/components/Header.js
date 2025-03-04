@@ -3,6 +3,13 @@ import { useNavigate } from 'react-router-dom'; // ✅ Import useNavigate
 
 const Header = ({ onFilter, onAddRecipeClick }) => {
     const navigate = useNavigate(); // ✅ Create a navigation function
+    const token = localStorage.getItem("token");
+
+    const handleLogout = () => {
+        localStorage.removeItem("token"); // Remove JWT Token
+        navigate("/login"); // Redirect to login page
+    };
+
 
     return (
         <nav className="navbar">
@@ -27,6 +34,14 @@ const Header = ({ onFilter, onAddRecipeClick }) => {
                 <button onClick={() => navigate('/ideas')} aria-label="Get Recipe ideas">
                     Get Recipe Ideas
                 </button>
+                {/* Show Logout button only if user is logged in */}
+                {token ? (
+                    <button onClick={handleLogout} style={{ marginLeft: "20px", backgroundColor: "red", color: "white" }}>
+                        Logout
+                    </button>
+                ) : (
+                    <button onClick={() => navigate("/login")}>Login</button>
+                )}
             </div>
         </nav>
     );

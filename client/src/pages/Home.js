@@ -11,6 +11,24 @@ const Home = () => {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [message, setMessage] = useState("");
+
+
+  // ✅ Decode JWT to check user role
+  const token = localStorage.getItem("token");
+
+  const getUserRole = () => {
+    if (!token) return null;
+    try {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      return decoded.role;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const role = getUserRole();
+
 
   // ✅ Move fetchRecipes OUTSIDE of useEffect
   const fetchRecipes = async () => {
@@ -46,6 +64,10 @@ const Home = () => {
   };
 
   const handleAddToFavorites = async (recipe) => {
+    if (role !== "admin") {
+      setMessage("Unauthorized: Only admins can add recipes!");
+      return;
+    }
     const newFavoriteStatus = !recipe.favorite;
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recipes/${recipe._id}/favorite`, {
@@ -84,7 +106,12 @@ const Home = () => {
     setSelectedRecipe(null);
   };
 
+  // Check user role before showing add recipe form
   const handleAddRecipeClick = () => {
+    if (role !== "admin") {
+      setMessage("Unauthorized: Only admins can add recipes!");
+      return;
+    }
     setShowAddForm(true);
   };
 
@@ -93,11 +120,20 @@ const Home = () => {
   };
 
   const handleAddRecipe = async (newRecipe) => {
+    
+    if (role !== "admin") {
+      setMessage("Unauthorized: Only admins can add recipes!");
+      return;
+    }
+    
     try {
-
+      const token = localStorage.getItem("token");
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recipes`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(newRecipe),
       });
 
@@ -115,9 +151,18 @@ const Home = () => {
   };
 
   const handleDeleteRecipe = async (recipeId) => {
+
+    if (role !== "admin") {
+      setMessage("Unauthorized: Only admins can delete recipes!");
+      return;
+    }
+
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recipes/${recipeId}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
       });
 
       if (response.ok) {
@@ -138,6 +183,11 @@ const Home = () => {
   return (
     <div>
       <Header onFilter={handleFilter} onAddRecipeClick={handleAddRecipeClick} />
+      
+      {/* ✅ Show Unauthorized Messages Here */}
+      {message && <p style={{ color: "red", textAlign: "center", marginTop: "10px" }}>{message}</p>}
+
+      
       <RecipeList recipes={filteredRecipes} onRecipeClick={handleRecipeClick} />
 
       {showDetail && (
