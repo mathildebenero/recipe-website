@@ -1,22 +1,31 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { register } from "../services/authService";
+import { register, registerAdmin } from "../services/authService";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [secretKey, setSecretKey] = useState(""); // ✅ Add state for secretKey
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await register(email, password);
-      setMessage("Registration successful! Redirecting...");
-      setTimeout(() => navigate("/login"), 1500);
-    } catch (error) {
-      setMessage(error.response?.data?.error || "Registration failed");
-    }
+        if (secretKey) {
+          // ✅ If a secret key is provided, register as an admin
+          await registerAdmin(email, password, secretKey);
+          setMessage("Admin registration successful! Redirecting...");
+        } else {
+          // ✅ Otherwise, register as a normal user
+          await register(email, password);
+          setMessage("User registration successful! Redirecting...");
+        }
+  
+        setTimeout(() => navigate("/login"), 1500);
+      } catch (error) {
+        setMessage(error.response?.data?.error || "Registration failed");
+      }
   };
 
   return (
@@ -37,6 +46,15 @@ const Register = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+
+        {/* ✅ Optional secret key input for admin registration */}
+        <input
+          type="text"
+          placeholder="Admin Secret Key (optional)"
+          value={secretKey}
+          onChange={(e) => setSecretKey(e.target.value)}
+        />
+
         <button type="submit">Register</button>
       </form>
       {message && <p>{message}</p>}
