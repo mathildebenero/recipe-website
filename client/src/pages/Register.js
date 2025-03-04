@@ -6,18 +6,19 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secretKey, setSecretKey] = useState(""); // ✅ Add state for secretKey
+  const [isAdmin, setIsAdmin] = useState(false); // ✅ Toggle admin registration
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-        if (secretKey) {
-          // ✅ If a secret key is provided, register as an admin
+        if (isAdmin && secretKey) {
+          // ✅ If registering as an admin
           await registerAdmin(email, password, secretKey);
           setMessage("Admin registration successful! Redirecting...");
         } else {
-          // ✅ Otherwise, register as a normal user
+          // ✅ If registering as a normal user
           await register(email, password);
           setMessage("User registration successful! Redirecting...");
         }
@@ -47,13 +48,25 @@ const Register = () => {
           required
         />
 
-        {/* ✅ Optional secret key input for admin registration */}
-        <input
-          type="text"
-          placeholder="Admin Secret Key (optional)"
-          value={secretKey}
-          onChange={(e) => setSecretKey(e.target.value)}
-        />
+        {/* ✅ Checkbox to show admin secret key */}
+        <label>
+          <input 
+            type="checkbox" 
+            checked={isAdmin} 
+            onChange={() => setIsAdmin(!isAdmin)} 
+          />
+          Register as Admin
+        </label>
+
+        {/* ✅ Show secret key input only if isAdmin is checked */}
+        {isAdmin && (
+          <input
+            type="text"
+            placeholder="Admin Secret Key"
+            value={secretKey}
+            onChange={(e) => setSecretKey(e.target.value)}
+          />
+        )}
 
         <button type="submit">Register</button>
       </form>

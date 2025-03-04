@@ -12,13 +12,22 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await login(email, password);
-      localStorage.setItem("token", response.data.token); // Store JWT token
-      setMessage("Login successful! Redirecting...");
-      setTimeout(() => navigate("/"), 1500);
+      
+      console.log("🔹 Login Response:", response); // Debugging
+  
+      if (response.data?.token) {
+        localStorage.setItem("token", response.data.token); // ✅ Store JWT token
+        setMessage("Login successful! Redirecting...");
+        setTimeout(() => navigate("/"), 1500);
+      } else {
+        setMessage("Invalid login response, please try again.");
+      }
     } catch (error) {
+      console.error("🔴 Login Error:", error.response?.data || error.message);
       setMessage(error.response?.data?.error || "Login failed");
     }
   };
+  
 
   return (
     <div>
