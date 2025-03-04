@@ -24,6 +24,9 @@ mongoose.connect(process.env.MONGO_URI)
 app.post("/create-admin", async (req, res) => {
   const { email, password, secretKey } = req.body;
 
+  console.log("🔹 Received secretKey:", secretKey);
+  console.log("🔹 Stored ADMIN_SECRET:", process.env.ADMIN_SECRET); // Debugging line
+
   // Check if the provided secret key matches the one in .env
   if (secretKey !== process.env.ADMIN_SECRET) {
       return res.status(403).json({ error: "Unauthorized action" });
