@@ -10,7 +10,10 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log("🔹 Login form submitted!"); // Debugging
+    
     try {
+      console.log("🔹 Calling login API with:", { email, password });
       const response = await login(email, password);
       
       console.log("🔹 Login Response:", response); // Debugging
@@ -27,6 +30,7 @@ const Login = () => {
       setMessage(error.response?.data?.error || "Login failed");
     }
   };
+  
   
 
   return (

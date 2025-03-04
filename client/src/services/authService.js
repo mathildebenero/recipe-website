@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_BACKEND_URL?.replace(/\/$/, "") || "http://localhost:5000";
+// Ensure API URL is correct (use HTTPS for production)
+const API_URL = process.env.REACT_APP_BACKEND_URL?.replace(/\/$/, "") || "https://recipe-website-66gy.onrender.com";
+
+console.log("🔹 API URL being used:", API_URL); // Debugging
 
 // ✅ Function for normal user registration
 export const register = async (email, password) => {
@@ -14,5 +17,6 @@ export const registerAdmin = async (email, password, secretKey) => {
 
 // ✅ Function for login
 export const login = async (email, password) => {
+  console.log("🔹 Sending Login Request to:", `${API_URL}/login`); // Debugging
   return axios.post(`${API_URL}/login`, { email, password });
 };
