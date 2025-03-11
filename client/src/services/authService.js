@@ -15,8 +15,8 @@ export const registerAdmin = async (email, password, secretKey) => {
   return axios.post(`${API_URL}/create-admin`, { email, password, secretKey });
 };
 
-// ✅ Function for login
+// ✅ Function for user login
 export const login = async (email, password) => {
-  console.log("🔹 Sending Login Request to:", `${API_URL}/login`); // Debugging
-  return axios.post(`${API_URL}/login`, { email, password });
-};
+    console.log("🔹 Sending Login Request to:", `${API_URL}/login`); // Debugging
+    return axios.post(`${API_URL}/login`, { email, password });
+  };

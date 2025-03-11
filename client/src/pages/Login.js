@@ -10,28 +10,28 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("🔹 Login form submitted!"); // Debugging
-    
     try {
-      console.log("🔹 Calling login API with:", { email, password });
       const response = await login(email, password);
-      
       console.log("🔹 Login Response:", response); // Debugging
-  
+
       if (response.data?.token) {
-        localStorage.setItem("token", response.data.token); // ✅ Store JWT token
-        setMessage("Login successful! Redirecting...");
-        setTimeout(() => navigate("/"), 1500);
+        // ✅ Store token in localStorage
+        localStorage.setItem("token", response.data.token);
+        
+        // ✅ Decode the JWT to get the user role
+        const decodedToken = JSON.parse(atob(response.data.token.split(".")[1]));
+        localStorage.setItem("role", decodedToken.role); // Store role (admin/user)
+
+        setMessage("✅ Login successful! Redirecting...");
+        setTimeout(() => navigate("/"), 1500); // Redirect to Home.js
       } else {
-        setMessage("Invalid login response, please try again.");
+        setMessage("❌ Invalid login response, please try again.");
       }
     } catch (error) {
       console.error("🔴 Login Error:", error.response?.data || error.message);
-      setMessage(error.response?.data?.error || "Login failed");
+      setMessage(error.response?.data?.error || "❌ Login failed. Please try again.");
     }
   };
-  
-  
 
   return (
     <div>
