@@ -70,9 +70,13 @@ const Home = () => {
     }
     const newFavoriteStatus = !recipe.favorite;
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/recipes/${recipe._id}/favorite`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ favorite: newFavoriteStatus }),
       });
 
