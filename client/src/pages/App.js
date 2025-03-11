@@ -7,17 +7,19 @@ import Register from "./Register.js";
 import PrivateRoute from "./PrivateRoute.js"; // ✅ Import PrivateRoute
 
 const App = () => {
+  const token = localStorage.getItem("token"); // ✅ Check if user is logged in
+
   return (
     <Router>
       <Routes>
-        {/* ✅ Default route redirects to Register */}
-        <Route path="/" element={<Navigate to="/register" />} />
-        
-        {/* ✅ Public Routes (accessible to everyone) */}
+        {/* ✅ If logged in, go to Home. Otherwise, go to Register */}
+        <Route path="/" element={token ? <Navigate to="/home" /> : <Navigate to="/register" />} />
+
+        {/* ✅ Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* ✅ Protected Routes (accessible only if logged in) */}
+        {/* ✅ Protected Routes */}
         <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/ideas" element={<PrivateRoute><ExistingIdeas /></PrivateRoute>} />
       </Routes>
