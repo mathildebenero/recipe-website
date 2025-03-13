@@ -50,7 +50,7 @@ app.post("/create-admin", async (req, res) => {
 });
 
 
-  // Register function
+  // register function bla bla
   app.post("/register", async (req, res) => {
     const { email, password, role } = req.body; // Role can be "admin" or "user"
 
